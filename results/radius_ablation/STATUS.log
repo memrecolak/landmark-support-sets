@@ -1,0 +1,26 @@
+[2026-04-24 03:46:54] === runner start (pid=1384) ===
+[2026-04-24 03:46:54] START influence seed=42 r=4
+[2026-04-24 04:32:11] DONE  influence seed=42 r=4
+[2026-04-24 04:32:11] START elimination seed=42 r=4
+[2026-04-24 10:02:52] DONE  elimination seed=42 r=4
+[2026-04-24 10:02:53] START influence seed=42 r=12
+[2026-04-24 10:48:27] DONE  influence seed=42 r=12
+[2026-04-24 10:48:27] START elimination seed=42 r=12
+[2026-04-24 16:34:26] DONE  elimination seed=42 r=12
+[2026-04-24 16:34:26] START influence seed=7 r=4
+[2026-04-24 17:23:06] DONE  influence seed=7 r=4
+[2026-04-24 17:23:06] START elimination seed=7 r=4
+[2026-04-24 23:22:06] DONE  elimination seed=7 r=4
+[2026-04-24 23:22:06] START influence seed=7 r=12
+[2026-04-25 00:11:03] DONE  influence seed=7 r=12
+[2026-04-25 00:11:03] START elimination seed=7 r=12
+[2026-04-25 05:55:32] DONE  elimination seed=7 r=12
+[2026-04-25 05:55:32] START influence seed=13 r=4
+[2026-04-25 06:41:11] DONE  influence seed=13 r=4
+[2026-04-25 06:41:11] START elimination seed=13 r=4
+[2026-04-25 12:15:23] DONE  elimination seed=13 r=4
+[2026-04-25 12:15:23] START influence seed=13 r=12
+[2026-04-25 13:00:52] DONE  influence seed=13 r=12
+[2026-04-25 13:00:52] START elimination seed=13 r=12
+[2026-04-25 18:34:00] DONE  elimination seed=13 r=12
+[2026-04-25 18:34:00] === runner finished: all 6 pairs complete ===

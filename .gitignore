@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+.env
+
+# IDE
+.idea/
+.vscode/
+.claude/
+
+# Datasets and training artifacts (license-restricted or large)
+data/
+experiments/
+*.pth
+*.pt
+*.ckpt
+*.tfevents.*
+
+# OS
+.DS_Store
+Thumbs.db
