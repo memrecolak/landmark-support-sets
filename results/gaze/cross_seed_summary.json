@@ -1,0 +1,52 @@
+{
+  "seeds": {
+    "seed42": {
+      "support_size": 59,
+      "non_support_size": 39,
+      "all98_mean": 8.341142622629802,
+      "all98_std": 2.85197350781197,
+      "eye_support_mean": 8.123736921946207,
+      "eye_support_std": 2.154709768341471,
+      "non_support_mean": 10.994099426269532,
+      "non_support_std": 1.7988062471611173,
+      "eye_support_gap_mean": -0.21740570068359374,
+      "non_support_gap_mean": 2.65295680363973,
+      "wilcoxon_eye_vs_all98_p": 0.5614013671875,
+      "wilcoxon_non_vs_all98_p": 0.00836181640625
+    },
+    "seed7": {
+      "support_size": 85,
+      "non_support_size": 13,
+      "all98_mean": 8.62918914159139,
+      "all98_std": 2.670485506973564,
+      "eye_support_mean": 8.676458962758382,
+      "eye_support_std": 2.6108067675339877,
+      "non_support_mean": 11.03644167582194,
+      "non_support_std": 1.847251556765926,
+      "eye_support_gap_mean": 0.04726982116699219,
+      "non_support_gap_mean": 2.40725253423055,
+      "wilcoxon_eye_vs_all98_p": 0.52447509765625,
+      "wilcoxon_non_vs_all98_p": 0.012451171875
+    },
+    "seed13": {
+      "support_size": 84,
+      "non_support_size": 14,
+      "all98_mean": 8.965981833140056,
+      "all98_std": 2.8137736988432915,
+      "eye_support_mean": 8.734334055582682,
+      "eye_support_std": 2.7333759559099833,
+      "non_support_mean": 11.00946699778239,
+      "non_support_std": 1.845110341971338,
+      "eye_support_gap_mean": -0.23164777755737304,
+      "non_support_gap_mean": 2.043485164642334,
+      "wilcoxon_eye_vs_all98_p": 0.03533935546875,
+      "wilcoxon_non_vs_all98_p": 0.01806640625
+    }
+  },
+  "cross_seed": {
+    "eye_support_gap_mean_across_seeds": -0.13392788569132485,
+    "eye_support_gap_max_abs": 0.23164777755737304,
+    "non_support_gap_mean_across_seeds": 2.3678981675042046,
+    "non_support_gap_min_across_seeds": 2.043485164642334
+  }
+}

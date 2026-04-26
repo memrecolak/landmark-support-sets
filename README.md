@@ -10,7 +10,7 @@ Three findings hold on every cell of a 3-seed × 3-radius × 8-tolerance robustn
 2. The contour region requires the largest support.
 3. Contour support exceeds nose support.
 
-A downstream check on MPIIFaceGaze (15-fold leave-one-person-out) shows the eye-region support set (59 landmarks) matches the all-98 input within 0.22°, while its complement (39 landmarks) degrades by 2.65°.
+A downstream check on MPIIFaceGaze (15-fold leave-one-person-out) shows the eye-region support set tracks the all-98 input on every seed (max gap 0.23°), while the complement degrades by 2.0–2.6°. A paired Wilcoxon over the 15 fold-pairs confirms the asymmetry: complement-vs-all-98 is significant on every seed (p ≤ 0.018); eye-support-vs-all-98 is indistinguishable on seeds 42 and 7, and significantly *negative* (support better) on seed 13.
 
 ## Layout
 
@@ -22,15 +22,18 @@ scripts/      entry-point scripts (data prep, train, ablate, analyse, plot)
 src/          library code
 ```
 
-`results/` ships with the seed-42 artifacts compiled into the manuscript:
+`results/` ships with the artifacts compiled into the manuscript:
 
-- `influence_matrix.npz` — the 98×98 mean-Δ-on-Δ importance matrix (~92 MB)
-- `mpiifacegaze_landmarks.npz` — predicted landmarks for every MPIIFaceGaze frame (~30 MB)
+- `influence_matrix.npz` — the seed-42 98×98 mean-Δ-on-Δ importance matrix (~92 MB)
+- `mpiifacegaze_landmarks.npz` — predicted landmarks for every MPIIFaceGaze frame, seed-42 detector (~30 MB)
 - `cross_seed_tau_table.{json,md}` — τ-sweep × seed × radius support-set sizes
 - `radius_ablation_table.{json,md}` — radius sweep at τ = 0.005
 - `forward_greedy_bound.{json,md}` — linear-additivity surrogate vs. backward-greedy comparison
 - `dark_decoding_eval.{json,md}` — per-region NME with DARK decoding
-- `attribute_analysis/`, `gaze/`, `elimination/`, `radius_ablation/`, `seed7/`, `seed13/` — supporting per-cell outputs
+- `gaze/cross_seed_summary.{json,md}` — cross-seed gaze table + paired-Wilcoxon p-values
+- `gaze/{,seed7/,seed13/}gaze_results.json` — per-seed 15-fold LOPO gaze results
+- `gaze/seed{7,13}/landmarks.npz` — per-seed MPIIFaceGaze landmark predictions (~30 MB each)
+- `attribute_analysis/`, `elimination/`, `radius_ablation/`, `seed7/`, `seed13/` — supporting per-cell outputs
 
 ## Setup
 
@@ -75,9 +78,17 @@ python scripts/aggregate_cross_seed_tau.py
 python scripts/aggregate_radius_ablation.py
 python scripts/forward_greedy_bound.py
 
-# 5. Downstream gaze regression on MPIIFaceGaze (~30 min)
-python scripts/predict_landmarks_mpiifacegaze.py --seed 42
-python scripts/run_gaze.py
+# 5. Downstream gaze regression on MPIIFaceGaze (~10 min per seed)
+#    Per-seed predict + run_gaze, then aggregate with Wilcoxon:
+python scripts/predict_landmarks_mpiifacegaze.py \
+    --checkpoint experiments/wflw_hrnet_w18_baseline/best.pth \
+    --mpii-root data/mpiifacegaze --out results/gaze/landmarks.npz
+python scripts/run_gaze.py \
+    --landmarks results/gaze/landmarks.npz \
+    --trajectories results/elimination/trajectories.json \
+    --out results/gaze
+# (repeat for seeds 7 and 13, then)
+python scripts/aggregate_cross_seed_gaze.py
 
 # 6. Plots
 python scripts/plot_influence_matrix.py
