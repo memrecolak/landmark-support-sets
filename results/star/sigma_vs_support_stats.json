@@ -1,0 +1,21 @@
+{
+  "n_landmarks": 98,
+  "spearman_rho": -0.5228440023248356,
+  "spearman_p_scipy": 3.3371447393140325e-08,
+  "spearman_ci95_bootstrap": [
+    -0.6538346940882139,
+    -0.36607324615045006
+  ],
+  "spearman_p_perm": 9.999000099990002e-05,
+  "pearson_r": -0.5330035333377501,
+  "pearson_p": 1.6051946886721017e-08,
+  "sigma_range_heatmap_px": [
+    3.210202217102051,
+    4.825956344604492
+  ],
+  "support_count_range": [
+    2,
+    8
+  ],
+  "bootstrap_B": 10000
+}

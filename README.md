@@ -10,22 +10,23 @@ Three findings hold on every cell of a 3-seed × 3-radius × 8-tolerance robustn
 2. The contour region requires the largest support.
 3. Contour support exceeds nose support.
 
-A downstream check on MPIIFaceGaze (15-fold leave-one-person-out) shows the eye-region support set tracks the all-98 input on every seed (max gap 0.23°), while the complement degrades by 2.0–2.6°. A paired Wilcoxon over the 15 fold-pairs confirms the asymmetry: complement-vs-all-98 is significant on every seed (p ≤ 0.018); eye-support-vs-all-98 is indistinguishable on seeds 42 and 7, and significantly *negative* (support better) on seed 13.
+A downstream check on MPIIFaceGaze (15-fold leave-one-person-out) shows the eye-region support set tracks the all-98 input on every seed (max gap 0.23°), while the complement degrades by 2.0–2.6°. A paired Wilcoxon over the 15 fold-pairs confirms the asymmetry: complement-vs-all-98 is significant on every seed (p ≤ 0.018); eye-support-vs-all-98 is indistinguishable on Seeds A and B, and significantly *negative* (support better) on Seed C.
+
+A training-time corroboration retrains HRNet-W18 with the loss masked to the 59 eye-support landmarks on three independent seeds; eye-region NME matches the all-98 baseline to within ≤ 1σ (mean Δ = +0.0008 left_eye, −0.0004 right_eye). A cross-architecture sanity check on STAR-Loss (Stacked Hourglass + AAM) on the same WFLW crops reproduces all three load-bearing claims (`|S| < 98`, contour-largest, contour > nose), and the per-landmark heatmap σ from STAR correlates with the HRNet support cardinality at Spearman ρ = −0.32 (p_perm = 0.002, N = 98).
 
 ## Layout
 
 ```
 configs/      training configs (HRNet-W18 on WFLW, three seeds)
-figures/      PNG figures used in the manuscript
 results/      influence matrix, support-set tables, gaze results, per-attribute breakdown
-scripts/      entry-point scripts (data prep, train, ablate, analyse, plot)
+scripts/      entry-point scripts (data prep, train, ablate, analyse)
 src/          library code
 ```
 
 `results/` ships with the artifacts compiled into the manuscript:
 
-- `influence_matrix.npz` — the seed-42 98×98 mean-Δ-on-Δ importance matrix (~92 MB)
-- `mpiifacegaze_landmarks.npz` — predicted landmarks for every MPIIFaceGaze frame, seed-42 detector (~30 MB)
+- `influence_matrix.npz` — the Seed-A 98×98 mean-Δ-on-Δ importance matrix (~92 MB)
+- `mpiifacegaze_landmarks.npz` — predicted landmarks for every MPIIFaceGaze frame, Seed-A detector (~30 MB)
 - `cross_seed_tau_table.{json,md}` — τ-sweep × seed × radius support-set sizes
 - `radius_ablation_table.{json,md}` — radius sweep at τ = 0.005
 - `forward_greedy_bound.{json,md}` — linear-additivity surrogate vs. backward-greedy comparison
@@ -34,6 +35,9 @@ src/          library code
 - `gaze/{,seed7/,seed13/}gaze_results.json` — per-seed 15-fold LOPO gaze results
 - `gaze/seed{7,13}/landmarks.npz` — per-seed MPIIFaceGaze landmark predictions (~30 MB each)
 - `attribute_analysis/`, `elimination/`, `radius_ablation/`, `seed7/`, `seed13/` — supporting per-cell outputs
+- `star/influence_matrix_star.npz` — STAR-Loss 98×98 influence matrix on the same WFLW crops (cross-architecture sanity check)
+- `star/sigma_per_landmark.npz`, `star/sigma_vs_support_stats.json` — STAR per-landmark heatmap σ + Spearman ρ stats vs. HRNet support cardinality
+- `star/trajectories_star.json`, `star/robust_claims_summary.md` — STAR per-region elimination trajectories and a check that the three load-bearing HRNet claims also hold on STAR
 
 ## Setup
 
@@ -90,14 +94,24 @@ python scripts/run_gaze.py \
 # (repeat for seeds 7 and 13, then)
 python scripts/aggregate_cross_seed_gaze.py
 
-# 6. Plots
-python scripts/plot_influence_matrix.py
-python scripts/plot_elimination_trajectories.py
-python scripts/plot_radius_ablation.py
-python scripts/plot_gaze.py
+# 6. Cross-architecture sanity check on STAR-Loss (Stacked Hourglass + AAM)
+#    Confirms the three load-bearing HRNet claims (|S| < 98, contour-largest,
+#    contour > nose) on a different architecture trained on the same WFLW crops.
+python scripts/run_influence_star.py
+python scripts/run_elimination_star.py
+python scripts/extract_star_sigma.py
+python scripts/check_robust_claims_star.py
+python scripts/scatter_star_sigma_vs_support.py   # writes sigma_vs_support_stats.json
+
+# 7. Training-time corroboration: HRNet-W18 with loss masked to the eye-support set.
+#    Three independent seeds; eye-region NME should match the all-98 baseline
+#    to within ~1σ (Δ = +0.0008 left_eye, −0.0004 right_eye).
+python -m src.training.train_subset --config configs/wflw_hrnet_w18_eyesupport_seed7381.yaml
+python -m src.training.train_subset --config configs/wflw_hrnet_w18_eyesupport_seed9321.yaml
+python -m src.training.train_subset --config configs/wflw_hrnet_w18_eyesupport_seed6027.yaml
 ```
 
-The pre-computed seed-42 outputs in `results/` let you skip steps 1–3 and reproduce the figures and tables directly.
+The pre-computed Seed-A outputs in `results/` let you skip steps 1–3 and reproduce the numerical claims directly. The pre-computed STAR artifacts in `results/star/` let you skip step 6's training pass and verify the cross-architecture claims directly.
 
 ## License
 
