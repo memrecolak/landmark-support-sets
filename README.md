@@ -12,7 +12,7 @@ Three findings hold on every cell of a 3-seed × 3-radius × 8-tolerance robustn
 
 A downstream check on MPIIFaceGaze (15-fold leave-one-person-out) shows the eye-region support set tracks the all-98 input on every seed (max gap 0.23°), while the complement degrades by 2.0–2.6°. A paired Wilcoxon over the 15 fold-pairs confirms the asymmetry: complement-vs-all-98 is significant on every seed (p ≤ 0.018); eye-support-vs-all-98 is indistinguishable on Seeds A and B, and significantly *negative* (support better) on Seed C.
 
-A training-time corroboration retrains HRNet-W18 with the loss masked to the 59 eye-support landmarks on three independent seeds; eye-region NME matches the all-98 baseline to within ≤ 1σ (mean Δ = +0.0008 left_eye, −0.0004 right_eye). A cross-architecture sanity check on STAR-Loss (Stacked Hourglass + AAM) on the same WFLW crops reproduces all three load-bearing claims (`|S| < 98`, contour-largest, contour > nose), and the per-landmark heatmap σ from STAR correlates with the HRNet support cardinality at Spearman ρ = −0.32 (p_perm = 0.002, N = 98).
+A training-time corroboration retrains HRNet-W18 with the loss masked to the 59 eye-support landmarks on three independent seeds; eye-region NME matches the all-98 baseline to within ≤ 1σ (mean Δ = +0.0008 left_eye, −0.0004 right_eye). A cross-architecture sanity check on STAR-Loss (Stacked Hourglass + AAM) on the same WFLW crops reproduces all three load-bearing claims (`|S| < 98`, contour-largest, contour > nose), and the per-landmark heatmap σ from STAR correlates with the HRNet support cardinality at Spearman ρ = −0.52 (95% bootstrap CI [−0.65, −0.37], p_perm ≈ 1e-4, N = 98).
 
 ## Layout
 
